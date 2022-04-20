@@ -265,7 +265,7 @@ def plot_airfoil_polar_files(airfoil_path, airfoil_polar_paths, line_color = 'k-
         CL_sur = a_data.lift_coefficient_surrogates
         CD_sur = a_data.drag_coefficient_surrogates
         
-        alpha   = np.asarray(a_data.aoa_from_polar)
+        alpha   = np.linspace(-16,16,100) * Units.deg
         n_alpha = len(alpha.T)
         alpha   = np.reshape(alpha,(n_airfoils,1,n_alpha))
         alpha   = np.repeat(alpha, n_Re, axis=1)
@@ -308,6 +308,7 @@ def plot_airfoil_polar_files(airfoil_path, airfoil_polar_paths, line_color = 'k-
         axes.set_ylabel('$C_L$')  
         axes.legend(bbox_to_anchor=(1,1), loc='upper left', ncol=1)
         
+        plt.tight_layout()
         if save_figure:
             plt.savefig(save_filename +'_' + str(i) + file_type)   
         if display_plot:
@@ -338,9 +339,9 @@ def plot_airfoil_aerodynamic_coefficients(airfoil_path, airfoil_polar_paths, lin
     n_airfoils = shape[0]
     n_Re       = shape[1]
 
-    col_raw = ['m-', 'b-', 'r-', 'g-', 'o-','p-']    
+    col_raw = ['m-', 'b-', 'r-', 'g-', 'k-','y-']    
     if use_surrogate:
-        col_sur = ['m--', 'b--', 'r--', 'g--', 'o--','p--']
+        col_sur = ['m--', 'b--', 'r--', 'g--', 'k--','y--']
         # Compute airfoil surrogates
         a_data = compute_airfoil_polars(airfoil_path, airfoil_polar_paths,npoints = 200, use_pre_stall_data=False)
         CL_sur = a_data.lift_coefficient_surrogates
@@ -380,7 +381,7 @@ def plot_airfoil_aerodynamic_coefficients(airfoil_path, airfoil_polar_paths, lin
         airfoil_name = os.path.basename(airfoil_path[i])
             
         # plot all Reynolds number polars for ith airfoil
-        fig  = plt.figure(airfoil_name[:-4], figsize=(8,2*n_Re))
+        fig  = plt.figure(airfoil_name[:-4], figsize=(8,1.5*n_Re))
           
         for j in range(n_Re):
             ax1    = fig.add_subplot(n_Re,2,1+2*j)
