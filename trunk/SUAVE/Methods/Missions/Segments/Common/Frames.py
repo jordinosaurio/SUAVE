@@ -355,7 +355,13 @@ def update_forces(segment):
     wind_drag_force_vector        = conditions.frames.wind.drag_force_vector
     body_thrust_force_vector      = conditions.frames.body.thrust_force_vector
     inertial_gravity_force_vector = conditions.frames.inertial.gravity_force_vector
-
+    
+    #special case load factor
+    if hasattr(segment, 'load_factor'):
+        n = segment.load_factor
+    else:
+        n = 1.0
+            
     # unpack transformation matrices
     T_body2inertial = conditions.frames.body.transform_to_inertial
     T_wind2inertial = conditions.frames.wind.transform_to_inertial
@@ -364,7 +370,7 @@ def update_forces(segment):
     L = orientation_product(T_wind2inertial,wind_lift_force_vector)
     D = orientation_product(T_wind2inertial,wind_drag_force_vector)
     T = orientation_product(T_body2inertial,body_thrust_force_vector)
-    W = inertial_gravity_force_vector
+    W = inertial_gravity_force_vector * n
 
     # sum of the forces
     F = L + D + T + W
